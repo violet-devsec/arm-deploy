@@ -48,7 +48,7 @@
       },
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serviceplanname'))]",
-        "httpsOnly": true,
+        "httpsOnly": false,
         "minTlsVersion": "1.2",
         "siteConfig": {
           "alwaysOn": true,

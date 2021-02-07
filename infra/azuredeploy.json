@@ -1,0 +1,73 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appservicename": {
+      "type": "String",
+      "metadata": {
+        "description": "Name of web app"
+      }
+    },
+    "serviceplanname": {
+      "type": "String",
+      "metadata": {
+        "description": "Name of the App Service Plan",
+        "defaultValue": "azskplan"
+      }
+    },
+    "location": {
+      "defaultValue": "South Central US",
+      "type": "String",
+      "metadata": {
+        "description": "Location of AppService"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "name": "[parameters('serviceplanname')]",
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "location": "[parameters('location')]",
+      "properties": {},
+      "sku": {
+        "name": "S1",
+        "tier": "Standard",
+        "size": "S1",
+        "capacity": 2
+      }
+    },
+    {
+      "name": "[parameters('appservicename')]",
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serviceplanname'))]",
+        "httpsOnly": false,
+        "minTlsVersion": "1.2",
+        "siteConfig": {
+          "alwaysOn": true,
+          "use32BitWorkerProcess": false,
+          "requestTracingEnabled": true,
+          "httpLoggingEnabled": true,
+          "detailedErrorLoggingEnabled": true,
+          "remoteDebuggingEnabled": false,
+          "webSocketsEnabled": false,
+          "siteAuthEnabled": true,
+          "netFrameworkVersion": "v4.7",
+          "siteAuthSettings":{
+              "clientId":"***********ClientId**********"
+            }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('serviceplanname'))]"
+      ]
+    }
+  ]
+}

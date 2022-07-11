@@ -1,1 +1,2 @@
-# arm-deploy 1
+# About
+ARM template to deploy web application to Azure Cloud.
